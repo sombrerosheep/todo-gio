@@ -13,14 +13,19 @@ type TodoApp struct {
 	window *app.Window
 
 	theme *material.Theme
+
+	listPanel  *ListPanel
+	itemsPanel *ItemsPanel
 }
 
 func NewTodoApp(w *app.Window) *TodoApp {
 	theme := material.NewTheme(gofont.Collection())
 
 	todo := TodoApp{
-		window: w,
-		theme:  theme,
+		window:     w,
+		theme:      theme,
+		listPanel:  NewListPanel(theme),
+		itemsPanel: NewItemsPanel(theme),
 	}
 
 	return &todo
@@ -47,12 +52,11 @@ func (todo *TodoApp) Run() error {
 }
 
 func (todo *TodoApp) Layout(gtx layout.Context) {
-	layout.Flex{Axis: layout.Vertical}.Layout(gtx,
-		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-			return layout.N.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-				return material.H5(todo.theme, "todo:>").Layout(gtx)
-			})
-		}),
-		ListSelections(state, todo.theme, gtx),
+	layout.Flex{
+		Axis: layout.Axis(layout.Horizontal),
+	}.Layout(
+		gtx,
+		layout.Flexed(0.35, todo.listPanel.Layout),
+		layout.Flexed(1, todo.itemsPanel.Layout),
 	)
 }
