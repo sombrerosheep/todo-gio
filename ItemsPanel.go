@@ -24,7 +24,7 @@ func (ip *ItemsPanel) Frame() {
 }
 
 func (ip *ItemsPanel) Layout(gtx layout.Context) layout.Dimensions {
-	return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
+	dims := layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 			return material.Body1(ip.theme, "Items Panel").Layout(gtx)
 		}),
@@ -32,4 +32,10 @@ func (ip *ItemsPanel) Layout(gtx layout.Context) layout.Dimensions {
 			return ip.header.Layout(gtx)
 		}),
 	)
+
+	if debug.Enabled {
+		return DebugDimensions(gtx, dims, ip.theme)
+	}
+
+	return dims
 }

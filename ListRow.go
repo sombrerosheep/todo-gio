@@ -8,5 +8,11 @@ import (
 type ListRow struct{}
 
 func (ls ListRow) Layout(gtx layout.Context, name string, theme *material.Theme) layout.Dimensions {
-	return material.Body1(theme, name).Layout(gtx)
+	dims := material.Body1(theme, name).Layout(gtx)
+
+	if debug.Enabled {
+		return DebugDimensions(gtx, dims, theme)
+	}
+
+	return dims
 }

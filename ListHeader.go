@@ -21,7 +21,7 @@ func NewListHeader(theme *material.Theme) *ListHeader {
 }
 
 func (header ListHeader) Layout(gtx layout.Context) layout.Dimensions {
-	return layout.Flex{
+	dims := layout.Flex{
 		Axis: layout.Horizontal,
 	}.Layout(
 		gtx,
@@ -33,4 +33,9 @@ func (header ListHeader) Layout(gtx layout.Context) layout.Dimensions {
 		}),
 	)
 
+	if debug.Enabled {
+		return DebugDimensions(gtx, dims, header.theme)
+	}
+
+	return dims
 }

@@ -22,7 +22,7 @@ func NewItemsHeader(theme *material.Theme) *ItemsHeader {
 }
 
 func (header ItemsHeader) Layout(gtx layout.Context) layout.Dimensions {
-	return layout.Flex{Axis: layout.Horizontal}.Layout(
+	dims := layout.Flex{Axis: layout.Horizontal}.Layout(
 		gtx,
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 			return material.Body1(header.theme, "ItemsHeader").Layout(gtx)
@@ -33,4 +33,10 @@ func (header ItemsHeader) Layout(gtx layout.Context) layout.Dimensions {
 			})
 		}),
 	)
+
+	if debug.Enabled {
+		return DebugDimensions(gtx, dims, header.theme)
+	}
+
+	return dims
 }

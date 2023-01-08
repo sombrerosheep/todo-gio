@@ -26,9 +26,8 @@ func (lp *ListPanel) Frame() {
 }
 
 func (lp ListPanel) Layout(gtx layout.Context) layout.Dimensions {
-	return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
+	dims := layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-
 			return layout.N.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 				return lp.listHeader.Layout(gtx)
 			})
@@ -41,4 +40,10 @@ func (lp ListPanel) Layout(gtx layout.Context) layout.Dimensions {
 
 		}),
 	)
+
+	if debug.Enabled {
+		return DebugDimensions(gtx, dims, lp.theme)
+	}
+
+	return dims
 }
