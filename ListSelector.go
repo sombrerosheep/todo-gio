@@ -14,7 +14,7 @@ func (ls ListSelector) Layout(gtx layout.Context, listNames []string, theme *mat
 		return ListRow{}.Layout(gtx, listNames[i], theme)
 	})
 
-	if debug.Enabled {
+	if DebugLayout() {
 		return DebugDimensions(gtx, dims, theme)
 	}
 

@@ -41,7 +41,7 @@ func (lp ListPanel) Layout(gtx layout.Context) layout.Dimensions {
 		}),
 	)
 
-	if debug.Enabled {
+	if DebugLayout() {
 		return DebugDimensions(gtx, dims, lp.theme)
 	}
 

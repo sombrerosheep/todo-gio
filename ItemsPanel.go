@@ -33,7 +33,7 @@ func (ip *ItemsPanel) Layout(gtx layout.Context) layout.Dimensions {
 		}),
 	)
 
-	if debug.Enabled {
+	if debugLayout {
 		return DebugDimensions(gtx, dims, ip.theme)
 	}
 

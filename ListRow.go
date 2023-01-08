@@ -10,7 +10,7 @@ type ListRow struct{}
 func (ls ListRow) Layout(gtx layout.Context, name string, theme *material.Theme) layout.Dimensions {
 	dims := material.Body1(theme, name).Layout(gtx)
 
-	if debug.Enabled {
+	if DebugLayout() {
 		return DebugDimensions(gtx, dims, theme)
 	}
 

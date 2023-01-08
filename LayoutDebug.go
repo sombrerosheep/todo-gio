@@ -33,12 +33,13 @@ func getBorderColor() color.NRGBA {
 	return c
 }
 
-var debug = struct {
-	Width   unit.Dp
-	Enabled bool
-}{
-	Width:   unit.Dp(3),
-	Enabled: true,
+const (
+	debugLayout bool    = true
+	debugWidth  unit.Dp = 3
+)
+
+func DebugLayout() bool {
+	return debugLayout
 }
 
 func DebugDimensions(gtx layout.Context, dims layout.Dimensions, theme *material.Theme) layout.Dimensions {
@@ -49,14 +50,14 @@ func DebugDimensions(gtx layout.Context, dims layout.Dimensions, theme *material
 		layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 			return widget.Border{
 				Color:        debugColor,
-				Width:        debug.Width,
+				Width:        debugWidth,
 				CornerRadius: unit.Dp(5),
 			}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 				return dims
 			})
 		}),
 		layout.Expanded(func(gtx layout.Context) layout.Dimensions {
-			return layout.UniformInset(debug.Width).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+			return layout.UniformInset(debugWidth).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 				debugDims := material.Body1(theme, fmt.Sprintf("(%d x %d)", dims.Size.X, dims.Size.Y))
 				debugDims.Alignment = text.Alignment(layout.End)
 				debugDims.Color = debugColor

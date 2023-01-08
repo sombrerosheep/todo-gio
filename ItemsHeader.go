@@ -34,7 +34,7 @@ func (header ItemsHeader) Layout(gtx layout.Context) layout.Dimensions {
 		}),
 	)
 
-	if debug.Enabled {
+	if debugLayout {
 		return DebugDimensions(gtx, dims, header.theme)
 	}
 
