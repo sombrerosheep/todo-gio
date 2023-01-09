@@ -9,12 +9,14 @@ type ItemsPanel struct {
 	theme *material.Theme
 
 	header *ItemsHeader
+	list   *ItemsList
 }
 
 func NewItemsPanel(theme *material.Theme) *ItemsPanel {
 	lp := ItemsPanel{
 		theme:  theme,
 		header: NewItemsHeader(theme),
+		list:   NewItemsList(theme, state.GetSelected()),
 	}
 
 	return &lp
@@ -30,6 +32,9 @@ func (ip *ItemsPanel) Layout(gtx layout.Context) layout.Dimensions {
 		}),
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 			return ip.header.Layout(gtx)
+		}),
+		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+			return ip.list.Layout(gtx)
 		}),
 	)
 

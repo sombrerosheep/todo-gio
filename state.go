@@ -51,6 +51,14 @@ func (s State) GetListKeys() []string {
 	return keys
 }
 
+func (s State) GetList(listName string) ([]Item, error) {
+	if s.listExists(listName) {
+		return s.lists[listName], nil
+	}
+
+	return nil, ListNotFoundError{listName}
+}
+
 func (s *State) AddList(listName string) error {
 	if _, ok := s.lists[listName]; ok {
 		return fmt.Errorf("List \"%s\" already exists", listName)
