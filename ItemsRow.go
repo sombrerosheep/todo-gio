@@ -30,6 +30,10 @@ func NewItemsRow(theme *material.Theme, item Item) *ItemsRow {
 }
 
 func (row ItemsRow) Layout(gtx layout.Context) layout.Dimensions {
+	if row.widget.Clicked() {
+		state.SetStatus("Delete Item Clicked")
+	}
+
 	dims := layout.Flex{
 		Axis: layout.Axis(layout.Horizontal),
 	}.Layout(

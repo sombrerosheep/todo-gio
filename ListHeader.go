@@ -21,6 +21,10 @@ func NewListHeader(theme *material.Theme) *ListHeader {
 }
 
 func (header ListHeader) Layout(gtx layout.Context) layout.Dimensions {
+	if header.widget.Clicked() {
+		state.SetStatus("New List Clicked")
+	}
+
 	dims := layout.Flex{
 		Axis: layout.Horizontal,
 	}.Layout(
@@ -29,7 +33,7 @@ func (header ListHeader) Layout(gtx layout.Context) layout.Dimensions {
 			return material.Body1(header.theme, "List Header").Layout(gtx)
 		}),
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-			return material.Button(header.theme, header.widget, "click me").Layout(gtx)
+			return material.Button(header.theme, header.widget, "New List").Layout(gtx)
 		}),
 	)
 

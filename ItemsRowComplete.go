@@ -27,6 +27,10 @@ func NewItemsRowComplete(theme *material.Theme, completed time.Time) *ItemsRowCo
 func (row ItemsRowComplete) Layout(gtx layout.Context) layout.Dimensions {
 	var dims layout.Dimensions
 
+	if row.widget.Clicked() {
+		state.SetStatus("Mark item complete clicked")
+	}
+
 	if row.completed.IsZero() {
 		// Incomplete
 		dims = material.Button(row.theme, row.widget, "Complete").Layout(gtx)
