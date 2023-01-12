@@ -26,6 +26,16 @@ func (e ListNotFoundError) Error() string {
 type State struct {
 	lists        ListMap
 	selectedList string
+
+	status string
+}
+
+func (state *State) SetStatus(msg string) {
+	state.status = msg
+}
+
+func (state *State) GetStatus() string {
+	return state.status
 }
 
 func (state State) GetSelected() string {
@@ -160,6 +170,8 @@ func NewStateFromFile(path string) (*State, error) {
 		return state, err
 	}
 	fmt.Printf("Setting selected to %s\n", state.selectedList)
+
+	state.SetStatus("Hello")
 
 	return state, nil
 }

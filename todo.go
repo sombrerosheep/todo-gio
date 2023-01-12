@@ -52,11 +52,31 @@ func (todo *TodoApp) Run() error {
 }
 
 func (todo *TodoApp) Layout(gtx layout.Context) {
+
 	layout.Flex{
-		Axis: layout.Axis(layout.Horizontal),
+		Axis:    layout.Axis(layout.Vertical),
+		Spacing: layout.SpaceStart,
 	}.Layout(
 		gtx,
-		layout.Flexed(0.35, todo.listPanel.Layout),
-		layout.Flexed(1, todo.itemsPanel.Layout),
+		layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
+			return layout.Flex{
+				Axis: layout.Axis(layout.Horizontal),
+			}.Layout(
+				gtx,
+				layout.Flexed(0.35, todo.listPanel.Layout),
+				layout.Flexed(1, todo.itemsPanel.Layout),
+			)
+		}),
+		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+			return layout.Inset{
+				Top:    2,
+				Bottom: 2,
+				Left:   5,
+				Right:  5,
+			}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+				return material.Body2(todo.theme, state.GetStatus()).Layout(gtx)
+			})
+		}),
 	)
+
 }

@@ -7,11 +7,11 @@ import (
 	"gioui.org/widget/material"
 )
 
+var rows []*ItemsRow
+
 type ItemsList struct {
 	theme    *material.Theme
 	listName string
-
-	rows []*ItemsRow
 }
 
 func NewItemsList(theme *material.Theme, listName string) *ItemsList {
@@ -25,11 +25,13 @@ func NewItemsList(theme *material.Theme, listName string) *ItemsList {
 		theme:    theme,
 		listName: listName,
 
-		rows: make([]*ItemsRow, len(items)),
+		//	rows: make([]*ItemsRow, len(items)),
 	}
 
+	rows = make([]*ItemsRow, len(items))
+
 	for i, v := range items {
-		list.rows[i] = NewItemsRow(theme, v)
+		rows[i] = NewItemsRow(theme, v)
 	}
 
 	return &list
@@ -38,8 +40,8 @@ func NewItemsList(theme *material.Theme, listName string) *ItemsList {
 func (list ItemsList) Layout(gtx layout.Context) layout.Dimensions {
 	itemList := layout.List{Axis: layout.Vertical}
 
-	dims := itemList.Layout(gtx, len(list.rows), func(gtx layout.Context, i int) layout.Dimensions {
-		return list.rows[i].Layout(gtx)
+	dims := itemList.Layout(gtx, len(rows), func(gtx layout.Context, i int) layout.Dimensions {
+		return rows[i].Layout(gtx)
 	})
 
 	if DebugLayout() {
