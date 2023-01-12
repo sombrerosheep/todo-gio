@@ -16,6 +16,7 @@ type TodoApp struct {
 
 	listPanel  *ListPanel
 	itemsPanel *ItemsPanel
+	statusBar  *StatusBar
 }
 
 func NewTodoApp(w *app.Window) *TodoApp {
@@ -26,6 +27,7 @@ func NewTodoApp(w *app.Window) *TodoApp {
 		theme:      theme,
 		listPanel:  NewListPanel(theme),
 		itemsPanel: NewItemsPanel(theme),
+		statusBar:  &StatusBar{theme: theme},
 	}
 
 	return &todo
@@ -52,7 +54,6 @@ func (todo *TodoApp) Run() error {
 }
 
 func (todo *TodoApp) Layout(gtx layout.Context) {
-
 	layout.Flex{
 		Axis:    layout.Axis(layout.Vertical),
 		Spacing: layout.SpaceStart,
@@ -67,16 +68,6 @@ func (todo *TodoApp) Layout(gtx layout.Context) {
 				layout.Flexed(1, todo.itemsPanel.Layout),
 			)
 		}),
-		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-			return layout.Inset{
-				Top:    2,
-				Bottom: 2,
-				Left:   5,
-				Right:  5,
-			}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-				return material.Body2(todo.theme, state.GetStatus()).Layout(gtx)
-			})
-		}),
+		layout.Rigid(todo.statusBar.Layout),
 	)
-
 }
