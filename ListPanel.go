@@ -10,19 +10,21 @@ import (
 type ListPanel struct {
 	theme *material.Theme
 
-	listHeader *ListHeader
+	listHeader   *ListHeader
+	listSelector *ListSelector
 }
 
-func NewListPanel(theme *material.Theme) *ListPanel {
+func NewListPanel(rowSelected chan<- string, theme *material.Theme) *ListPanel {
+	names := state.GetListKeys()
+	sort.Strings(names)
+
 	lp := ListPanel{
-		theme:      theme,
-		listHeader: NewListHeader(theme),
+		theme:        theme,
+		listHeader:   NewListHeader(theme),
+		listSelector: NewListSelector(names, rowSelected, theme),
 	}
 
 	return &lp
-}
-
-func (lp *ListPanel) Frame() {
 }
 
 func (lp ListPanel) Layout(gtx layout.Context) layout.Dimensions {
@@ -33,11 +35,7 @@ func (lp ListPanel) Layout(gtx layout.Context) layout.Dimensions {
 			})
 		}),
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-			names := state.GetListKeys()
-			sort.Strings(names)
-
-			return ListSelector{}.Layout(gtx, names, lp.theme)
-
+			return lp.listSelector.Layout(gtx)
 		}),
 	)
 

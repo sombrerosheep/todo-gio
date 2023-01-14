@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"gioui.org/app"
 	"gioui.org/font/gofont"
 	"gioui.org/io/system"
@@ -9,25 +11,41 @@ import (
 	"gioui.org/widget/material"
 )
 
+type ListItem struct {
+	list    string
+	newItem string
+}
+
 type TodoApp struct {
 	window *app.Window
 
 	theme *material.Theme
 
 	listPanel  *ListPanel
-	itemsPanel *ItemsPanel
+	itemsPanel ItemsPanel
 	statusBar  *StatusBar
+
+	addList       chan string
+	remList       chan string
+	selectNewList chan string
+	addItem       chan ListItem
+	remItem       chan ListItem
+	completeItem  chan ListItem
 }
 
 func NewTodoApp(w *app.Window) *TodoApp {
 	theme := material.NewTheme(gofont.Collection())
 
+	selectNewListChan := make(chan string, 8)
+
 	todo := TodoApp{
 		window:     w,
 		theme:      theme,
-		listPanel:  NewListPanel(theme),
+		listPanel:  NewListPanel(selectNewListChan, theme),
 		itemsPanel: NewItemsPanel(theme),
 		statusBar:  &StatusBar{theme: theme},
+
+		selectNewList: selectNewListChan,
 	}
 
 	return &todo
@@ -48,6 +66,16 @@ func (todo *TodoApp) Run() error {
 
 			case system.DestroyEvent:
 				return e.Err
+			}
+
+		case l := <-todo.selectNewList:
+			if l == state.GetSelected() {
+				break
+			}
+
+			err := state.SetSelected(l)
+			if err != nil {
+				log.Println(err)
 			}
 		}
 	}

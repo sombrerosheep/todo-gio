@@ -18,7 +18,7 @@ type ItemsRow struct {
 	complete *ItemsRowComplete
 }
 
-func NewItemsRow(theme *material.Theme, item Item) *ItemsRow {
+func NewItemsRow(theme *material.Theme, item Item) ItemsRow {
 	row := ItemsRow{
 		theme:    theme,
 		widget:   &widget.Clickable{},
@@ -26,14 +26,10 @@ func NewItemsRow(theme *material.Theme, item Item) *ItemsRow {
 		complete: NewItemsRowComplete(theme, item.Completed),
 	}
 
-	return &row
+	return row
 }
 
 func (row ItemsRow) Layout(gtx layout.Context) layout.Dimensions {
-	if row.widget.Clicked() {
-		state.SetStatus("Delete Item Clicked")
-	}
-
 	dims := layout.Flex{
 		Axis: layout.Axis(layout.Horizontal),
 	}.Layout(
