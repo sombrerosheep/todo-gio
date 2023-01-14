@@ -22,7 +22,7 @@ type TodoApp struct {
 	theme *material.Theme
 
 	listPanel  *ListPanel
-	itemsPanel ItemsPanel
+	itemsPanel *ItemsPanel
 	statusBar  *StatusBar
 
 	addList       chan string
@@ -68,6 +68,10 @@ func (todo *TodoApp) Run() error {
 				return e.Err
 			}
 
+		case newList := <-todo.addList:
+			log.Printf("chan received new list: %s\n", newList)
+		case list := <-todo.remList:
+			log.Printf("chan received remove list: %s\n", list)
 		case l := <-todo.selectNewList:
 			if l == state.GetSelected() {
 				break
@@ -77,6 +81,13 @@ func (todo *TodoApp) Run() error {
 			if err != nil {
 				log.Println(err)
 			}
+
+		case item := <-todo.addItem:
+			log.Printf("chan received new item [%s](%s)\n", item.list, item.newItem)
+		case item := <-todo.remItem:
+			log.Printf("chan received remove item [%s](%s)\n", item.list, item.newItem)
+		case item := <-todo.completeItem:
+			log.Printf("chan received complete item [%s](%s)\n", item.list, item.newItem)
 		}
 	}
 }
